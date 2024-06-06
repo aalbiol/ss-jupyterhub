@@ -1,0 +1,9 @@
+c_n =
+\left\{
+\begin{array}{lll}
+\frac{A}{\pi (1 - n^2)} & n \, \mathrm{ par} & \\
+0 & n \, \mathrm{ impar} & n\not = \pm 1 \\
+\frac{A}{4j} & n=1 & \\
+???? & n=-1 & \\
+\end{array}
+\right.
