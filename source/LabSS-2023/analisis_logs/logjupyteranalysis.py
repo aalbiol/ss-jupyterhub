@@ -76,3 +76,46 @@ def detecta_usuarios_dobles(ficherologs):
         if len(v)>1:
             casos_interesantes[k]=v
     return casos_interesantes
+
+
+
+def detecta_usuarios_dobles_hora(ficherologs):
+    with open(ficherologs, 'r') as file1:
+        lineas = file1.readlines()
+    fechas=[]
+    horas=[]
+    usuarios=[]
+    ips=[]
+    
+    data=[]
+    for l in tqdm(lineas):
+        res=analisis_linea(l)
+        if res is None:
+            continue
+        fecha,hora,usuario,dir_ip=res
+        fechas.append(fecha)
+        horas.append(horas)
+        usuarios.append(usuario)
+        ips.append(dir_ip)
+        data.append({"fecha":fecha,"hora":hora,"usuario":usuario, "ip":dir_ip})
+
+    df=pd.DataFrame(data)
+############ Solucion con pandas
+    #df1=df.groupby(["fecha","ip"]).usuario.unique().tolist()
+    #casos_pandas=[c for c in df1 if len(c)>1]
+    #print(casos_pandas)
+###############################################    
+    
+    usuarios_por_ip={}
+    for k in range(len(df)):
+        evento=df.iloc[k]
+        usuarios_por_ip[(evento.fecha,evento.hora,evento.ip)]=set()
+    for k in range(len(df)):
+        evento=df.iloc[k]
+        usuarios_por_ip[(evento['fecha'],evento['hora'],evento.ip)].add(evento.usuario)   
+
+    casos_interesantes={}
+    for k,v in usuarios_por_ip.items():
+        if len(v)>1:
+            casos_interesantes[k]=v
+    return casos_interesantes
